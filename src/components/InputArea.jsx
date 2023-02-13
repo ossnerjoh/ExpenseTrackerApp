@@ -1,22 +1,74 @@
-export default function InputArea() {
+import { useState } from "react";
+
+export default function InputArea({ addItem }) {
+  const today = new Date().toISOString().substring(0, 10);
+  const [newExpense, setNewExpense] = useState({
+    date: today,
+    title: "",
+    category: "Freizeit",
+    amount: ""
+  });
+
+  function handleChange(e) {
+    let { name, value } = e.target;
+
+    setNewExpense((prev) => {
+      return {
+        ...prev,
+        [name]: value
+      };
+    });
+    console.log(newExpense);
+  }
+
   return (
     <div className="InputArea card mb-3 py-2">
       <div className="card-body">
         <div className="input-group">
-          <input type="date" name="date" className="form-control" />
+          <input
+            type="date"
+            onChange={handleChange}
+            value={newExpense.date}
+            name="date"
+            className="form-control"
+          />
           <input
             type="text"
+            onChange={handleChange}
+            value={newExpense.title}
             name="title"
             placeholder="Neue Ausgabe"
             className="form-control"
           />
-          <select className="form-select" name="category">
-            <option selected>Kategorie</option>
-            <option value={1}>Lebensmittel</option>
-            <option value={2}>Freizeit</option>
-            <option value={3}>Gesundheit</option>
+          <select
+            value={newExpense.category}
+            onChange={handleChange}
+            className="form-select"
+            name="category"
+          >
+            <option value={null}>Kategorie</option>
+            <option value="Lebensmittel">Lebensmittel</option>
+            <option value="Freizeit">Freizeit</option>
+            <option value="Gesundheit">Gesundheit</option>
           </select>
-          <button className="btn btn-dark">+</button>
+          <input
+            type="text"
+            name="amount"
+            onChange={handleChange}
+            value={newExpense.amount}
+            step="any"
+            // pattern="^[0-9]*.[0-9]{2}$"
+            placeholder="Betrag"
+            className="form-control"
+          />
+          <button
+            onClick={() => {
+              addItem(newExpense);
+            }}
+            className="btn btn-dark"
+          >
+            +
+          </button>
         </div>
       </div>
     </div>

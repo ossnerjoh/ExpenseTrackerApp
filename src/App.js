@@ -4,17 +4,33 @@ import InputArea from "./components/InputArea";
 import { dummyExpenses } from "./data/dummyExpenses";
 import "./styles.css";
 
-console.log(dummyExpenses);
-
 export default function App() {
   const [expenses, setExpenses] = useState(dummyExpenses);
+
+  function deleteItem(id) {
+    setExpenses(expenses.filter((exp) => exp.id !== id));
+  }
+  function addItem(newExpense) {
+    const newId = expenses[expenses.length - 1].id + 1;
+    newExpense.amount = parseFloat(newExpense.amount);
+    console.log(newId);
+
+    setExpenses([
+      ...expenses,
+      {
+        id: newId,
+        ...newExpense
+      }
+    ]);
+    console.log(expenses);
+  }
 
   return (
     <div className=" App card">
       <div className="card-header">ExpenseTrackerApp</div>
       <div className="card-body">
-        <InputArea />
-        <ExpensesList expenses={expenses} />
+        <InputArea addItem={addItem} />
+        <ExpensesList expenses={expenses} deleteItem={deleteItem} />
       </div>
     </div>
   );
